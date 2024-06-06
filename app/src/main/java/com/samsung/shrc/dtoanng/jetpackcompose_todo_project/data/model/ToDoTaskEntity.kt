@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Constants.DATABASE_TABLE
 
 @Entity(tableName = DATABASE_TABLE)
-data class ToDoTask(
+data class ToDoTaskEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val title: String,
