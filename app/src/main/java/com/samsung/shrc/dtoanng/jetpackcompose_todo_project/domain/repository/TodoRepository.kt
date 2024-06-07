@@ -1,4 +1,4 @@
-package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain
+package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.repository
 
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTask
 import kotlinx.coroutines.flow.Flow

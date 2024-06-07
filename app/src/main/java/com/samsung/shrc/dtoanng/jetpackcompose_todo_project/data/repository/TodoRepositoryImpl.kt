@@ -3,7 +3,7 @@ package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.repository
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.TodoDatabase
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.mapper.toTodoTask
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.mapper.toTodoTaskEntity
-import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.TodoRepository
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.repository.TodoRepository
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTask
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
