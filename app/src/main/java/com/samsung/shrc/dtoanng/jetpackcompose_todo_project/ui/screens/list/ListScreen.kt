@@ -18,11 +18,18 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.R
 @Composable
 fun ListScreen(navigateToTaskScreens: (Int) -> Unit) {
     Scaffold(
+        topBar = {
+            ListAppBar()
+        },
         floatingActionButton = {
             ListFab(navigateToTaskScreens)
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(it))
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        )
     }
 }
 
