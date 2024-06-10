@@ -4,5 +4,5 @@
     <string name="tasks">Tasks</string>
     <string name="search_tasks">Search Tasks</string>
     <string name="filter_tasks">Filter Tasks</string>
-    <string name="delete_all_tasks">Delete all tasks</string>
+    <string name="delete_all_tasks">Delete all</string>
 </resources>

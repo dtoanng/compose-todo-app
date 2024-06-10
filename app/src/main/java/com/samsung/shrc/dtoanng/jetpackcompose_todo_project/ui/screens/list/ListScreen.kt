@@ -44,7 +44,7 @@ fun ListFab(navigateToTaskScreens: (Int) -> Unit) {
         Icon(
             imageVector = Icons.Filled.Add,
             contentDescription = stringResource(R.string.add_button),
-            tint = Color.White,
+            tint = MaterialTheme.colorScheme.secondary,
         )
     }
 }

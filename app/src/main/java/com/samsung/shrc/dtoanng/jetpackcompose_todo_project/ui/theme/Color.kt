@@ -1,7 +1,5 @@
 package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -12,19 +10,7 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val mint60 = Color(0xCC358B5C)
-
-val greyDark = Color(0xCC393A39)
-
 val LowPriorityColor = Color(0xFF00C980)
 val MediumPriorityColor = Color(0xFFFFC114)
 val HighPriorityColor = Color(0xFFFF4646)
 val NonePriorityColor = Color(0xFFFFFFFF)
-
-val topAppBarContentColor: Color
-    @Composable
-    get() = if (isSystemInDarkTheme()) Color.LightGray else Color.White
-
-val topAppBarBgColor: Color
-    @Composable
-    get() = if (isSystemInDarkTheme()) greyDark else mint60

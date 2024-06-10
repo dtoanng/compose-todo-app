@@ -30,8 +30,6 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.R
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.components.PriorityItem
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.ROUND_CONNER
-import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.topAppBarBgColor
-import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.topAppBarContentColor
 
 
 @Composable
@@ -55,10 +53,11 @@ fun DefaultListAppBar(
             Text(
                 stringResource(R.string.tasks),
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                color = topAppBarContentColor
+                color = MaterialTheme.colorScheme.secondary,
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(topAppBarBgColor),
+        modifier = Modifier.shadow(elevation = 2.dp),
+        colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.secondaryContainer),
         actions = {
             ListAppBarActions(
                 onSearchClicked = onSearchClicked,
@@ -88,7 +87,7 @@ fun SearchAction(
         Icon(
             imageVector = Icons.Filled.Search,
             contentDescription = stringResource(R.string.search_tasks),
-            tint = topAppBarContentColor
+            tint = MaterialTheme.colorScheme.secondary
         )
     }
 }
@@ -110,7 +109,7 @@ fun SortAction(
         Icon(
             imageVector = Icons.Filled.FilterList,
             contentDescription = stringResource(R.string.filter_tasks),
-            tint = topAppBarContentColor
+            tint = MaterialTheme.colorScheme.secondary
         )
 
         MaterialTheme(shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(ROUND_CONNER))) {
@@ -167,7 +166,7 @@ fun DeleteAction(
         Icon(
             imageVector = Icons.Filled.MoreVert,
             contentDescription = stringResource(R.string.delete_all_tasks),
-            tint = topAppBarContentColor
+            tint = MaterialTheme.colorScheme.secondary
         )
 
         MaterialTheme(shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(ROUND_CONNER))) {
@@ -183,7 +182,7 @@ fun DeleteAction(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = "Delete all tasks",
+                            text = stringResource(R.string.delete_all_tasks),
                             style = TextStyle(
                                 color = MaterialTheme.colorScheme.inverseSurface,
                                 fontStyle = FontStyle.Normal
