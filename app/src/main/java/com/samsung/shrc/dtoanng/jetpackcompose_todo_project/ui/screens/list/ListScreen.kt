@@ -10,17 +10,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.R
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.SharedViewModel
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarState
 
 @Composable
-fun ListScreen(navigateToTaskScreens: (Int) -> Unit) {
+fun ListScreen(navigateToTaskScreens: (Int) -> Unit, sharedViewModel: SharedViewModel) {
+
+    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
+    val searchTextState: String by sharedViewModel.searchTextState
+
     Scaffold(
         topBar = {
-            ListAppBar()
+            ListAppBar(
+                sharedViewModel = sharedViewModel,
+                searchAppBarState = searchAppBarState,
+                searchTextState = searchTextState
+            )
         },
         floatingActionButton = {
             ListFab(navigateToTaskScreens)
@@ -47,10 +56,4 @@ fun ListFab(navigateToTaskScreens: (Int) -> Unit) {
             tint = MaterialTheme.colorScheme.secondary,
         )
     }
-}
-
-@Composable
-@Preview
-private fun ListScreenPreview() {
-    ListScreen(navigateToTaskScreens = {})
 }
