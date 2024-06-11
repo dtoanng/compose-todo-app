@@ -10,6 +10,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,6 +21,13 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarSta
 
 @Composable
 fun ListScreen(navigateToTaskScreens: (Int) -> Unit, sharedViewModel: SharedViewModel) {
+
+
+    LaunchedEffect(key1 = true) {
+        sharedViewModel.getAllTasks()
+    }
+
+    val allTasks = sharedViewModel.allTasks.collectAsState()
 
     val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
     val searchTextState: String by sharedViewModel.searchTextState
@@ -39,7 +48,9 @@ fun ListScreen(navigateToTaskScreens: (Int) -> Unit, sharedViewModel: SharedView
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-        )
+        ) {
+            ListContent(listTask = allTasks.value, navigateToTaskScreens)
+        }
     }
 }
 
