@@ -49,7 +49,7 @@ fun ListScreen(navigateToTaskScreens: (Int) -> Unit, sharedViewModel: SharedView
                 .fillMaxSize()
                 .padding(it)
         ) {
-            ListContent(listTask = allTasks.value, navigateToTaskScreens)
+            ListContent(listRequestState = allTasks.value, navigateToTaskScreens)
         }
     }
 }

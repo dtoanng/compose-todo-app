@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTask
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.repository.TodoRepository
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.RequestState
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,17 +23,22 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
 
     val searchTextState: MutableState<String> = mutableStateOf("")
 
-    private val _allTasks = MutableStateFlow<List<TodoTask>>(emptyList())
-    val allTasks: StateFlow<List<TodoTask>> = _allTasks.asStateFlow()
+    private val _allTasks = MutableStateFlow<RequestState<List<TodoTask>>>(RequestState.Idle)
+    val allTasks: StateFlow<RequestState<List<TodoTask>>> = _allTasks.asStateFlow()
 
     private val _selectedTask = MutableStateFlow(TodoTask(priority = Priority.NONE))
     val selectedTask = _selectedTask.asStateFlow()
 
     fun getAllTasks() {
-        viewModelScope.launch {
-            todoRepository.getAllTasks().collect {
-                _allTasks.value = it
+        _allTasks.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                todoRepository.getAllTasks().collect {
+                    _allTasks.value = RequestState.Success(it)
+                }
             }
+        } catch (exception: Exception) {
+            _allTasks.value = RequestState.Error(exception)
         }
     }
 

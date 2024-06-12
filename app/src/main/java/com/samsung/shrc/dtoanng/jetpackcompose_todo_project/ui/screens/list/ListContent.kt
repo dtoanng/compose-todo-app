@@ -30,16 +30,17 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTask
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.PRIORITY_INDICATOR_SIZE
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.ROUND_CONNER
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.RequestState
 
 @Composable
 fun ListContent(
-    listTask: List<TodoTask>,
+    listRequestState: RequestState<List<TodoTask>>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    if (listTask.isEmpty())
-        EmptyContent()
+    if (listRequestState is RequestState.Success)
+        DisplayTask(listTask = listRequestState.data, navigateToTaskScreen = navigateToTaskScreen)
     else
-        DisplayTask(listTask = listTask, navigateToTaskScreen = navigateToTaskScreen)
+        EmptyContent()
 }
 
 @Composable
