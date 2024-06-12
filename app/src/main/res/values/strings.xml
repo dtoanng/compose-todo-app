@@ -8,4 +8,5 @@
     <string name="search_txt">Search</string>
     <string name="search_icon">Search Icon</string>
     <string name="close_icon">Close Icon</string>
+    <string name="empty_todo_task">Empty Todo Task</string>
 </resources>

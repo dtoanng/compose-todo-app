@@ -36,6 +36,17 @@ fun ListContent(
     listTask: List<TodoTask>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
+    if (listTask.isEmpty())
+        EmptyContent()
+    else
+        DisplayTask(listTask = listTask, navigateToTaskScreen = navigateToTaskScreen)
+}
+
+@Composable
+fun DisplayTask(
+    listTask: List<TodoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxHeight(),
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 4.dp),
@@ -54,7 +65,9 @@ fun TaskItem(
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     Surface(
-        modifier = Modifier.fillMaxWidth().padding(2.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(2.dp),
         color = MaterialTheme.colorScheme.inverseOnSurface,
         shape = RoundedCornerShape(ROUND_CONNER),
         shadowElevation = 2.0.dp,
