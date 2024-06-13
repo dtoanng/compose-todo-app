@@ -16,7 +16,7 @@ fun NavGraphBuilder.listComposable(
     composable(
         route = LIST_SCREEN,
         arguments = listOf(navArgument(LIST_ARGUMENT_KEY) {
-            type = NavType.StringType
+            type = NavType.IntType
         })
     ) {
         ListScreen(navigateToTaskScreens = navigateToTaskScreens, sharedViewModel = sharedViewModel)

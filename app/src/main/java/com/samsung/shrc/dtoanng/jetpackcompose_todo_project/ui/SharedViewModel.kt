@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,8 +27,8 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
     private val _allTasks = MutableStateFlow<RequestState<List<TodoTask>>>(RequestState.Idle)
     val allTasks: StateFlow<RequestState<List<TodoTask>>> = _allTasks.asStateFlow()
 
-    private val _selectedTask = MutableStateFlow(TodoTask(priority = Priority.NONE))
-    val selectedTask = _selectedTask.asStateFlow()
+    private val _selectedTask: MutableStateFlow<TodoTask?> = MutableStateFlow(null)
+    val selectedTask: StateFlow<TodoTask?> = _selectedTask.asStateFlow()
 
     fun getAllTasks() {
         _allTasks.value = RequestState.Loading
@@ -44,7 +45,7 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
 
     fun getSelectedTask(taskId: Int) {
         viewModelScope.launch {
-            todoRepository.getSelectedTask(taskId).collect {
+            todoRepository.getSelectedTask(taskId).collectLatest {
                 _selectedTask.value = it
             }
         }

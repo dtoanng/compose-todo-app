@@ -15,7 +15,7 @@ interface TodoDao {
     suspend fun getAllTasks(): List<ToDoTaskEntity>
 
     @Query("SELECT * FROM todo_table WHERE id=:taskId")
-    suspend fun getSelectedTask(taskId: Int): ToDoTaskEntity
+    suspend fun getSelectedTask(taskId: Int): ToDoTaskEntity?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addTask(toDoTaskEntity: ToDoTaskEntity)

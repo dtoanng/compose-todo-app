@@ -1,5 +1,6 @@
 package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.repository
 
+import android.util.Log
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.TodoDatabase
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.mapper.toTodoTask
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.mapper.toTodoTaskEntity
@@ -21,10 +22,14 @@ class TodoRepositoryImpl @Inject constructor(private val todoDatabase: TodoDatab
         }
     }
 
-    override suspend fun getSelectedTask(taskId: Int): Flow<TodoTask> {
+    override suspend fun getSelectedTask(taskId: Int): Flow<TodoTask?> {
         return flow {
             val toDoTaskEntity = todoDatabase.todoDao().getSelectedTask(taskId)
-            emit(toDoTaskEntity.toTodoTask())
+            if (toDoTaskEntity == null) {
+                emit(null)
+            } else {
+                emit(toDoTaskEntity.toTodoTask())
+            }
             return@flow
         }
     }

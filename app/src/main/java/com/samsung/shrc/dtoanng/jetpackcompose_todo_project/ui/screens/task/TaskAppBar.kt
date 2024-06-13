@@ -1,12 +1,10 @@
 package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.screens.task
 
-import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,8 +25,18 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Action
 
 
 @Composable
-fun TaskAppBar(navigationToListScreen: (Action) -> Unit) {
-    NewTaskAppBar(navigationToListScreen = navigationToListScreen)
+fun TaskAppBar(
+    todoTask: TodoTask?,
+    navigationToListScreen: (Action) -> Unit
+) {
+    if (todoTask == null) {
+        NewTaskAppBar(navigationToListScreen = navigationToListScreen)
+    } else {
+        ExistingTaskAppBar(
+            todoTask = todoTask,
+            navigationToListScreen = navigationToListScreen
+        )
+    }
 }
 
 
@@ -165,7 +172,7 @@ fun UpdateAction(
         onClick = { updateClicked(Action.UPDATE) }
     ) {
         Icon(
-            imageVector = Icons.Filled.Update,
+            imageVector = Icons.Filled.Check,
             contentDescription = stringResource(R.string.update_task),
             tint = MaterialTheme.colorScheme.secondary
         )
@@ -175,7 +182,7 @@ fun UpdateAction(
 @Composable
 @Preview
 fun TaskBarPreview() {
-    TaskAppBar(navigationToListScreen = {})
+    TaskAppBar(null, navigationToListScreen = {})
 }
 
 @Composable

@@ -20,6 +20,9 @@ fun Navigation(navController: NavHostController, sharedViewModel: SharedViewMode
             navigateToTaskScreens = screen.task,
             sharedViewModel = sharedViewModel
         )
-        taskComposable(navigateToListScreens = screen.list)
+        taskComposable(
+            navigateToListScreens = screen.list,
+            sharedViewModel = sharedViewModel
+        )
     }
 }
