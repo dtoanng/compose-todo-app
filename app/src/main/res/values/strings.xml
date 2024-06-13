@@ -9,4 +9,10 @@
     <string name="search_icon">Search Icon</string>
     <string name="close_icon">Close Icon</string>
     <string name="empty_todo_task">Empty Todo Task</string>
+    <string name="add_new_task">Add new task</string>
+    <string name="back_button">Back button</string>
+    <string name="add_task">Add task</string>
+    <string name="close_action">Close action</string>
+    <string name="update_task">Update task</string>
+    <string name="remove_task">Remove task</string>
 </resources>
