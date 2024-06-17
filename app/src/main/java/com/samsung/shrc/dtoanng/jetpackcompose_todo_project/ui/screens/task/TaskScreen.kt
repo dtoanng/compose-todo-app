@@ -1,6 +1,5 @@
 package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.screens.task
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -27,5 +26,6 @@ fun TaskScreen(
             ) {
 
             }
-        })
+        }
+    )
 }
