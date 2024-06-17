@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTask
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.repository.TodoRepository
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Constants.MAX_TITLE_LENGTH
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.RequestState
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -69,6 +70,12 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
             title.value = ""
             description.value = ""
             priority.value = Priority.LOW
+        }
+    }
+
+    fun updateTitle(titleTask: String) {
+        if (titleTask.length < MAX_TITLE_LENGTH) {
+            title.value = titleTask
         }
     }
 }
