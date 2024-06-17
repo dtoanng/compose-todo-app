@@ -80,7 +80,6 @@ fun BackAction(
             tint = MaterialTheme.colorScheme.secondary
         )
     }
-
 }
 
 @Composable
@@ -144,7 +143,6 @@ fun CloseAction(
             tint = MaterialTheme.colorScheme.secondary
         )
     }
-
 }
 
 @Composable

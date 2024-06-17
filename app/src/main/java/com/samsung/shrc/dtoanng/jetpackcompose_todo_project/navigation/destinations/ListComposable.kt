@@ -10,15 +10,15 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Constants.LIST_
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Constants.LIST_SCREEN
 
 fun NavGraphBuilder.listComposable(
-    navigateToTaskScreens: (Int) -> Unit,
+    navigateToTaskScreen: (taskId: Int) -> Unit,
     sharedViewModel: SharedViewModel
 ) {
     composable(
         route = LIST_SCREEN,
         arguments = listOf(navArgument(LIST_ARGUMENT_KEY) {
-            type = NavType.IntType
+            type = NavType.StringType
         })
     ) {
-        ListScreen(navigateToTaskScreens = navigateToTaskScreens, sharedViewModel = sharedViewModel)
+        ListScreen(navigateToTaskScreen = navigateToTaskScreen, sharedViewModel = sharedViewModel)
     }
 }

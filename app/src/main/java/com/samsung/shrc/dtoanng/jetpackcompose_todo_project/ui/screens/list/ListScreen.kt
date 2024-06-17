@@ -20,8 +20,10 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.SharedViewModel
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarState
 
 @Composable
-fun ListScreen(navigateToTaskScreens: (Int) -> Unit, sharedViewModel: SharedViewModel) {
-
+fun ListScreen(
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+    sharedViewModel: SharedViewModel
+) {
 
     LaunchedEffect(key1 = true) {
         sharedViewModel.getAllTasks()
@@ -41,7 +43,7 @@ fun ListScreen(navigateToTaskScreens: (Int) -> Unit, sharedViewModel: SharedView
             )
         },
         floatingActionButton = {
-            ListFab(navigateToTaskScreens)
+            ListFab(navigateToTaskScreen)
         }
     ) {
         Box(
@@ -49,15 +51,15 @@ fun ListScreen(navigateToTaskScreens: (Int) -> Unit, sharedViewModel: SharedView
                 .fillMaxSize()
                 .padding(it)
         ) {
-            ListContent(listRequestState = allTasks.value, navigateToTaskScreens)
+            ListContent(listRequestState = allTasks.value, navigateToTaskScreen)
         }
     }
 }
 
 @Composable
-fun ListFab(navigateToTaskScreens: (Int) -> Unit) {
+fun ListFab(navigateToTaskScreen: (Int) -> Unit) {
     SmallFloatingActionButton(
-        onClick = { navigateToTaskScreens(-1) },
+        onClick = { navigateToTaskScreen(-1) },
         containerColor = MaterialTheme.colorScheme.secondaryContainer,
         contentColor = MaterialTheme.colorScheme.secondary
     ) {
