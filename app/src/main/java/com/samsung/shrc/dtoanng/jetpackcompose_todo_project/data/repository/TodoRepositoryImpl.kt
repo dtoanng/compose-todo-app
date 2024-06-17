@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class TodoRepositoryImpl @Inject constructor(private val todoDatabase: TodoDatabase) : TodoRepository {
-    override suspend fun getAllTasks(): Flow<List<TodoTask>> {
+    override fun getAllTasks(): Flow<List<TodoTask>> {
         return flow {
             val toDoTaskEntities = todoDatabase.todoDao().getAllTasks()
 

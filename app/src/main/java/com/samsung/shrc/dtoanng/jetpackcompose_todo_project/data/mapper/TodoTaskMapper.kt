@@ -11,7 +11,6 @@ fun ToDoTaskEntity.toTodoTask() = TodoTask(
 )
 
 fun TodoTask.toTodoTaskEntity() = ToDoTaskEntity(
-    id = id,
     title = title,
     description = description,
     priority = priority

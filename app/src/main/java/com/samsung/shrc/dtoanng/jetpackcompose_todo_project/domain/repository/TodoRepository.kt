@@ -4,7 +4,7 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTas
 import kotlinx.coroutines.flow.Flow
 
 interface TodoRepository {
-    suspend fun getAllTasks(): Flow<List<TodoTask>>
+    fun getAllTasks(): Flow<List<TodoTask>>
     suspend fun getSelectedTask(taskId: Int): Flow<TodoTask?>
     suspend fun sortByLowPriority(): Flow<List<TodoTask>>
     suspend fun sortByHighPriority(): Flow<List<TodoTask>>
