@@ -9,32 +9,45 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.R
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.SharedViewModel
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Action
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarState
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
     sharedViewModel: SharedViewModel
 ) {
+    val action by sharedViewModel.action
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = action) {
         sharedViewModel.getAllTasks()
     }
 
-    val action by sharedViewModel.action
     val allTasks = sharedViewModel.allTasks.collectAsState()
     val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
     val searchTextState: String by sharedViewModel.searchTextState
 
-    sharedViewModel.handleActions(action = action)
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    DisplaySnackBar(
+        snackBarHostState = snackBarHostState,
+        handleDatabaseAction = { sharedViewModel.handleActions(action = action) },
+        taskTitle = sharedViewModel.title.value,
+        action = action
+    )
 
     Scaffold(
         topBar = {
@@ -46,7 +59,8 @@ fun ListScreen(
         },
         floatingActionButton = {
             ListFab(navigateToTaskScreen)
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) {
         Box(
             modifier = Modifier
@@ -75,3 +89,47 @@ fun ListFab(navigateToTaskScreen: (Int) -> Unit) {
         )
     }
 }
+
+@Composable
+fun DisplaySnackBar(
+    snackBarHostState: SnackbarHostState,
+    handleDatabaseAction: () -> Unit,
+    taskTitle: String,
+    action: Action
+) {
+    handleDatabaseAction()
+
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = action) {
+        if (action != Action.NO_ACTION) {
+            scope.launch {
+                val snackBarResult = snackBarHostState.showSnackbar(
+                    message = "${action.name} : $taskTitle",
+                    actionLabel = "Ok",
+                )
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
