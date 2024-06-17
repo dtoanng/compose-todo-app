@@ -2,8 +2,10 @@ package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
@@ -27,7 +29,8 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
 
     val action: MutableState<Action> = mutableStateOf(Action.NO_ACTION)
 
-    val id: MutableState<Int> = mutableIntStateOf(0)
+    var id by mutableIntStateOf(0)
+        private set
     val title: MutableState<String> = mutableStateOf("")
     val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
@@ -46,7 +49,6 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
         try {
             viewModelScope.launch {
                 todoRepository.getAllTasks().collect {
-                    Log.d("ToanSharedViewModel", "todo list: $it")
                     _allTasks.value = RequestState.Success(it)
                 }
             }
@@ -64,13 +66,13 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
     }
 
     fun handleActions(action: Action) {
-        Log.d("ToanSharedViewModel", "action: $action")
         when (action) {
             Action.ADD -> {
                 addTask()
             }
 
             Action.UPDATE -> {
+                updateTask()
             }
 
             Action.DELETE -> {
@@ -103,16 +105,31 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
         }
     }
 
+    private fun updateTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val todoTask = TodoTask(
+                id = id,
+                title = title.value,
+                description = description.value,
+                priority = priority.value
+            )
+
+            Log.d("toannnguyen2", "selectedTask: $todoTask")
+            todoRepository.updateTask(todoTask)
+        }
+    }
+
     fun updateTaskFields(selectedTask: TodoTask?) {
         if (selectedTask != null) {
             // case: selected a task
-            id.value = selectedTask.id
+            id = selectedTask.id
             title.value = selectedTask.title
             description.value = selectedTask.description
             priority.value = selectedTask.priority
         } else {
             // case: add new task
-            id.value = 0
+            id = 0
             title.value = ""
             description.value = ""
             priority.value = Priority.LOW
