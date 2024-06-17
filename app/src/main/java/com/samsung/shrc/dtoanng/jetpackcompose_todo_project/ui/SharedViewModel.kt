@@ -1,9 +1,11 @@
 package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTask
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.repository.TodoRepository
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.RequestState
@@ -19,8 +21,12 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedViewModel @Inject constructor(private val todoRepository: TodoRepository) : ViewModel() {
 
-    val searchAppBarState: MutableState<SearchAppBarState> = mutableStateOf(SearchAppBarState.CLOSED)
+    val id: MutableState<Int> = mutableIntStateOf(0)
+    val title: MutableState<String> = mutableStateOf("")
+    val description: MutableState<String> = mutableStateOf("")
+    val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
 
+    val searchAppBarState: MutableState<SearchAppBarState> = mutableStateOf(SearchAppBarState.CLOSED)
     val searchTextState: MutableState<String> = mutableStateOf("")
 
     private val _allTasks = MutableStateFlow<RequestState<List<TodoTask>>>(RequestState.Idle)
@@ -47,6 +53,22 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
             todoRepository.getSelectedTask(taskId).collectLatest {
                 _selectedTask.value = it
             }
+        }
+    }
+
+    fun updateTaskFields(selectedTask: TodoTask?) {
+        if (selectedTask != null) {
+            // case: selected a task
+            id.value = selectedTask.id
+            title.value = selectedTask.title
+            description.value = selectedTask.description
+            priority.value = selectedTask.priority
+        } else {
+            // case: add new task
+            id.value = 0
+            title.value = ""
+            description.value = ""
+            priority.value = Priority.LOW
         }
     }
 }

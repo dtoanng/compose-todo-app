@@ -1,5 +1,6 @@
 package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.navigation.destinations
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -25,8 +26,14 @@ fun NavGraphBuilder.taskComposable(
         sharedViewModel.getSelectedTask(taskId = taskId)
 
         val selectedTask = sharedViewModel.selectedTask.collectAsState()
+
+        LaunchedEffect(key1 = taskId) {
+            sharedViewModel.updateTaskFields(selectedTask = selectedTask.value)
+        }
+
         TaskScreen(
             selectedTask = selectedTask.value,
+            sharedViewModel = sharedViewModel,
             navigationToListScreen = navigateToListScreens
         )
     }
