@@ -80,6 +80,7 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
             }
 
             Action.DELETE_ALL -> {
+                deleteAllTasks()
             }
 
             Action.UNDO -> {
@@ -130,6 +131,12 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
             )
 
             todoRepository.deleteTask(todoTask)
+        }
+    }
+
+    private fun deleteAllTasks() {
+        viewModelScope.launch(Dispatchers.IO) {
+            todoRepository.deleteAllTasks()
         }
     }
 
