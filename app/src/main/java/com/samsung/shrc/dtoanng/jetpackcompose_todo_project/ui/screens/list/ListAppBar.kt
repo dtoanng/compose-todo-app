@@ -44,6 +44,7 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.SharedViewModel
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.components.PriorityItem
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.ROUND_CONNER
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.TOP_APPBAR_HEIGHT
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Action
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarState
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.TrailingIconState
 
@@ -60,7 +61,7 @@ fun ListAppBar(
             DefaultListAppBar(
                 onSearchClicked = { sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED },
                 onSortClicked = {},
-                onDeleteClicked = {}
+                onDeleteClicked = { sharedViewModel.action.value = Action.DELETE_ALL }
             )
         }
 

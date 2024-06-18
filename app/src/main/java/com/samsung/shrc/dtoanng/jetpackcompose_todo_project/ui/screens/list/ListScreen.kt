@@ -9,8 +9,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,6 +47,7 @@ fun ListScreen(
     DisplaySnackBar(
         snackBarHostState = snackBarHostState,
         handleDatabaseAction = { sharedViewModel.handleActions(action = action) },
+        onUndoClicked = { sharedViewModel.action.value = it },
         taskTitle = sharedViewModel.title.value,
         action = action
     )
@@ -94,6 +97,7 @@ fun ListFab(navigateToTaskScreen: (Int) -> Unit) {
 fun DisplaySnackBar(
     snackBarHostState: SnackbarHostState,
     handleDatabaseAction: () -> Unit,
+    onUndoClicked: (Action) -> Unit,
     taskTitle: String,
     action: Action
 ) {
@@ -105,13 +109,38 @@ fun DisplaySnackBar(
         if (action != Action.NO_ACTION) {
             scope.launch {
                 val snackBarResult = snackBarHostState.showSnackbar(
-                    message = "${action.name} : $taskTitle",
-                    actionLabel = "Ok",
+                    message = setMessage(action = action, taskTitle = taskTitle),
+                    actionLabel = setActionLabel(action = action),
+                    duration = SnackbarDuration.Short
+                )
+
+                undoDeletedTask(
+                    action = action,
+                    snackBarResult = snackBarResult,
+                    onUndoClicked = onUndoClicked
                 )
             }
         }
     }
 }
+
+private fun undoDeletedTask(
+    action: Action,
+    snackBarResult: SnackbarResult,
+    onUndoClicked: (Action) -> Unit
+) {
+    if (snackBarResult == SnackbarResult.ActionPerformed && action == Action.DELETE) {
+        onUndoClicked(Action.UNDO)
+    }
+}
+
+private fun setMessage(action: Action, taskTitle: String) = when (action) {
+    Action.DELETE_ALL -> "All task removed."
+    else -> "${action.name}: $taskTitle"
+}
+
+private fun setActionLabel(action: Action) = if (action.name == "DELETE") "UNDO" else "OK"
+
 
 
 
