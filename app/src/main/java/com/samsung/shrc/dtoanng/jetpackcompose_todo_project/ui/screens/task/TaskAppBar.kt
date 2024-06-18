@@ -13,6 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.R
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTask
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.components.DisplayAlertDialog
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Action
 
 @Composable
@@ -120,7 +125,10 @@ fun ExistingTaskAppBar(
             CloseAction(onBackClicked = navigationToListScreen)
         },
         actions = {
-            DeleteAction(deleteClicked = navigationToListScreen)
+            DeleteAction(
+                todoTask = todoTask,
+                deleteClicked = navigationToListScreen
+            )
             UpdateAction(updateClicked = navigationToListScreen)
         }
     )
@@ -144,11 +152,21 @@ fun CloseAction(
 
 @Composable
 fun DeleteAction(
+    todoTask: TodoTask?,
     deleteClicked: (Action) -> Unit
 ) {
 
+    var openDialog by remember { mutableStateOf(false) }
+
+    DisplayAlertDialog(
+        title = stringResource(R.string.remove) + " ${todoTask?.title}",
+        message = stringResource(R.string.do_you_want_to_delete_this_tasks),
+        openDialog = openDialog,
+        closeDialog = { openDialog = false },
+        onYesClicked = { deleteClicked(Action.DELETE) })
+
     IconButton(
-        onClick = { deleteClicked(Action.DELETE) }
+        onClick = { openDialog = true }
     ) {
         Icon(
             imageVector = Icons.Filled.Delete,

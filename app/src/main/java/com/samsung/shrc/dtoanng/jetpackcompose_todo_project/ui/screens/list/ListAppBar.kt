@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.R
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.SharedViewModel
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.components.DisplayAlertDialog
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.components.PriorityItem
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.ROUND_CONNER
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.TOP_APPBAR_HEIGHT
@@ -114,9 +115,19 @@ fun ListAppBarActions(
     onSortClicked: (Priority) -> Unit,
     onDeleteClicked: () -> Unit
 ) {
+
+    var openDialog by remember { mutableStateOf(false) }
+
+    DisplayAlertDialog(
+        title = "Delete all tasks",
+        message = "Do you want to delete all of tasks?",
+        openDialog = openDialog,
+        closeDialog = { openDialog = false },
+        onYesClicked = { onDeleteClicked() })
+
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
-    DeleteAction(onDeleteClicked = onDeleteClicked)
+    DeleteAction(onDeleteClicked = { openDialog = true })
 }
 
 @Composable
