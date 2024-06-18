@@ -48,7 +48,6 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Action
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarState
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.TrailingIconState
 
-
 @Composable
 fun ListAppBar(
     sharedViewModel: SharedViewModel,
@@ -59,7 +58,7 @@ fun ListAppBar(
     when (searchAppBarState) {
         SearchAppBarState.CLOSED -> {
             DefaultListAppBar(
-                onSearchClicked = { sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED },
+                onSearchClicked = { sharedViewModel.updateSearchAppBarState(SearchAppBarState.OPENED) },
                 onSortClicked = {},
                 onDeleteClicked = { sharedViewModel.action.value = Action.DELETE_ALL }
             )
@@ -71,8 +70,13 @@ fun ListAppBar(
                 onTextChange = { searchTxt ->
                     sharedViewModel.searchTextState.value = searchTxt
                 },
-                onCloseClicked = { sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED },
-                onSearchClicked = {}
+                onCloseClicked = {
+                    sharedViewModel.updateSearchAppBarState(SearchAppBarState.CLOSED)
+                    sharedViewModel.searchTextState.value = ""
+                },
+                onSearchClicked = {
+                    sharedViewModel.searchData(searchQuery = it)
+                }
             )
         }
     }
@@ -240,7 +244,7 @@ fun SearchAppBar(
     text: String,
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
-    onSearchClicked: () -> Unit
+    onSearchClicked: (String) -> Unit
 ) {
 
     var trailingIconsState by remember {
@@ -276,7 +280,7 @@ fun SearchAppBar(
             ),
             singleLine = true,
             leadingIcon = {
-                IconButton(onClick = { onSearchClicked() }) {
+                IconButton(onClick = { }) {
                     Icon(
                         modifier = Modifier.alpha(0.3F),
                         imageVector = Icons.Filled.Search,
@@ -313,7 +317,7 @@ fun SearchAppBar(
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = { onSearchClicked() }),
+            keyboardActions = KeyboardActions(onSearch = { onSearchClicked(text) }),
             colors = TextFieldDefaults.colors(
                 cursorColor = MaterialTheme.colorScheme.secondary,
                 focusedIndicatorColor = Color.Transparent,

@@ -23,7 +23,6 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTask
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Action
 
-
 @Composable
 fun TaskAppBar(
     todoTask: TodoTask?,
@@ -86,7 +85,6 @@ fun BackAction(
 fun AddAction(
     addClicked: (Action) -> Unit
 ) {
-
     IconButton(
         onClick = { addClicked(Action.ADD) }
     ) {
@@ -96,7 +94,6 @@ fun AddAction(
             tint = MaterialTheme.colorScheme.secondary
         )
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

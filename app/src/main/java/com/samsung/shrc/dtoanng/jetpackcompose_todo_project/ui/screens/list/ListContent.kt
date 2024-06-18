@@ -2,7 +2,6 @@ package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.screens.list
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,16 +29,45 @@ import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.model.TodoTas
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.PRIORITY_INDICATOR_SIZE
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.theme.ROUND_CONNER
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.RequestState
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarState
 
 @Composable
 fun ListContent(
-    listRequestState: RequestState<List<TodoTask>>,
+    allStates: RequestState<List<TodoTask>>,
+    searchedState: RequestState<List<TodoTask>>,
+    searchAppBarState: SearchAppBarState,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    if (listRequestState is RequestState.Success)
-        DisplayTask(listTask = listRequestState.data, navigateToTaskScreen = navigateToTaskScreen)
-    else
+    if (searchAppBarState == SearchAppBarState.TRIGGERED) {
+        if (searchedState is RequestState.Success) {
+            HandleListContent(
+                tasks = searchedState.data,
+                navigateToTaskScreen = navigateToTaskScreen
+            )
+        }
+    } else {
+        if (allStates is RequestState.Success) {
+            HandleListContent(
+                tasks = allStates.data,
+                navigateToTaskScreen = navigateToTaskScreen
+            )
+        }
+    }
+}
+
+@Composable
+fun HandleListContent(
+    tasks: List<TodoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit
+) {
+    if (tasks.isEmpty()) {
         EmptyContent()
+    } else {
+        DisplayTask(
+            listTask = tasks,
+            navigateToTaskScreen = navigateToTaskScreen
+        )
+    }
 }
 
 @Composable

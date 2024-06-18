@@ -24,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.R
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.SharedViewModel
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Action
-import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.SearchAppBarState
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,7 +38,9 @@ fun ListScreen(
     }
 
     val allTasks = sharedViewModel.allTasks.collectAsState()
-    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
+    val searchedTasks = sharedViewModel.searchedTask.collectAsState()
+
+    val searchAppBarState = sharedViewModel.searchAppBarState
     val searchTextState: String by sharedViewModel.searchTextState
 
     val snackBarHostState = remember { SnackbarHostState() }
@@ -71,7 +72,9 @@ fun ListScreen(
                 .padding(it)
         ) {
             ListContent(
-                listRequestState = allTasks.value,
+                allStates = allTasks.value,
+                searchedState = searchedTasks.value,
+                searchAppBarState = searchAppBarState,
                 navigateToTaskScreen = navigateToTaskScreen
             )
         }

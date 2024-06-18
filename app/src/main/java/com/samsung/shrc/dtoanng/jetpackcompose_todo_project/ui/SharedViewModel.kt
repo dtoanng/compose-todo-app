@@ -1,6 +1,5 @@
 package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -35,7 +34,9 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
     val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
 
-    val searchAppBarState: MutableState<SearchAppBarState> = mutableStateOf(SearchAppBarState.CLOSED)
+    var searchAppBarState by mutableStateOf(SearchAppBarState.CLOSED)
+        private set
+
     val searchTextState: MutableState<String> = mutableStateOf("")
 
     private val _allTasks = MutableStateFlow<RequestState<List<TodoTask>>>(RequestState.Idle)
@@ -43,6 +44,9 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
 
     private val _selectedTask: MutableStateFlow<TodoTask?> = MutableStateFlow(null)
     val selectedTask: StateFlow<TodoTask?> = _selectedTask.asStateFlow()
+
+    private val _searchedTasks = MutableStateFlow<RequestState<List<TodoTask>>>(RequestState.Idle)
+    val searchedTask: StateFlow<RequestState<List<TodoTask>>> = _searchedTasks
 
     fun getAllTasks() {
         _allTasks.value = RequestState.Loading
@@ -63,6 +67,21 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
                 _selectedTask.value = it
             }
         }
+    }
+
+    fun searchData(searchQuery: String) {
+        _searchedTasks.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                todoRepository.searchDatabase(search = "%$searchQuery%").collect { result ->
+                    _searchedTasks.value = RequestState.Success(data = result)
+                }
+            }
+        } catch (e: Exception) {
+            _searchedTasks.value = RequestState.Error(error = e)
+        }
+
+        searchAppBarState = SearchAppBarState.TRIGGERED
     }
 
     fun handleActions(action: Action) {
@@ -106,6 +125,8 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
 
             todoRepository.addTask(todoTask)
         }
+
+        searchAppBarState = SearchAppBarState.CLOSED
     }
 
     private fun updateTask() {
@@ -161,6 +182,10 @@ class SharedViewModel @Inject constructor(private val todoRepository: TodoReposi
         if (titleTask.length < MAX_TITLE_LENGTH) {
             title.value = titleTask
         }
+    }
+
+    fun updateSearchAppBarState(newSearchAppBarState: SearchAppBarState) {
+        searchAppBarState = newSearchAppBarState
     }
 
     fun validateFields(): Boolean {
