@@ -1,7 +1,5 @@
 package com.samsung.shrc.dtoanng.jetpackcompose_todo_project.ui.screens.list
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -31,7 +29,7 @@ fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
     sharedViewModel: SharedViewModel
 ) {
-    val action by sharedViewModel.action
+    val action = sharedViewModel.action
 
     LaunchedEffect(key1 = action) {
         sharedViewModel.getAllTasks()
@@ -51,7 +49,7 @@ fun ListScreen(
     DisplaySnackBar(
         snackBarHostState = snackBarHostState,
         handleDatabaseAction = { sharedViewModel.handleActions(action = action) },
-        onUndoClicked = { sharedViewModel.action.value = it },
+        onUndoClicked = { sharedViewModel.updateAction(it) },
         taskTitle = sharedViewModel.title.value,
         action = action
     )
@@ -67,24 +65,28 @@ fun ListScreen(
         floatingActionButton = {
             ListFab(navigateToTaskScreen)
         },
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-        ) {
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        content = { padding ->
             ListContent(
+                modifier = Modifier.padding(
+                    top = padding.calculateTopPadding(),
+                    bottom = padding.calculateBottomPadding()
+                ),
                 allStates = allTasks,
                 searchedState = searchedTasks,
                 lowPriorityTasks = lowPriorityTasks,
                 highPriorityTasks = highPriorityTasks,
                 sortState = sortState,
                 searchAppBarState = searchAppBarState,
+                onSwipeToDelete = { action, task ->
+                    sharedViewModel.updateAction(newAction = action)
+                    sharedViewModel.updateTaskFields(selectedTask = task)
+                    snackBarHostState.currentSnackbarData?.dismiss()
+                },
                 navigateToTaskScreen = navigateToTaskScreen
             )
         }
-    }
+    )
 }
 
 @Composable

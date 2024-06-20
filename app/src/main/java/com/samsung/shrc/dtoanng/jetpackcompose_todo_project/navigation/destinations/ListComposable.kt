@@ -27,7 +27,7 @@ fun NavGraphBuilder.listComposable(
         Log.d("ListComposable", "action: $action")
 
         LaunchedEffect(key1 = action) {
-            sharedViewModel.action.value = action
+            sharedViewModel.updateAction(action)
         }
 
         ListScreen(navigateToTaskScreen = navigateToTaskScreen, sharedViewModel = sharedViewModel)

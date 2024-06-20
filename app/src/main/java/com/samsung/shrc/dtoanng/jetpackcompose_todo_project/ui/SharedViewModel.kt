@@ -33,7 +33,8 @@ class SharedViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
-    val action: MutableState<Action> = mutableStateOf(Action.NO_ACTION)
+    var action by mutableStateOf(Action.NO_ACTION)
+        private set
 
     var id by mutableIntStateOf(0)
         private set
@@ -135,6 +136,7 @@ class SharedViewModel @Inject constructor(
         when (action) {
             Action.ADD -> {
                 addTask()
+                updateAction(Action.NO_ACTION)
             }
 
             Action.UPDATE -> {
@@ -151,14 +153,13 @@ class SharedViewModel @Inject constructor(
 
             Action.UNDO -> {
                 addTask()
+                updateAction(Action.NO_ACTION)
             }
 
             else -> {
                 //todo: has nothing to implement now
             }
         }
-
-        this.action.value = Action.NO_ACTION
     }
 
     private fun addTask() {
@@ -229,6 +230,10 @@ class SharedViewModel @Inject constructor(
         if (titleTask.length < MAX_TITLE_LENGTH) {
             title.value = titleTask
         }
+    }
+
+    fun updateAction(newAction: Action) {
+        action = newAction
     }
 
     fun updateSearchAppBarState(newSearchAppBarState: SearchAppBarState) {
