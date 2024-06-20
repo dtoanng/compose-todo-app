@@ -9,17 +9,19 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.data.model.Priority
+import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.domain.repository.DataStoreRepository
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Constants.PREFERENCE_KEY
 import com.samsung.shrc.dtoanng.jetpackcompose_todo_project.util.Constants.PREFERENCE_NAME
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCE_NAME)
 
-class DataStoreRepository constructor(@ApplicationContext private val context: Context) {
+class DataStoreRepositoryImpl @Inject constructor(@ApplicationContext private val context: Context): DataStoreRepository {
 
     private object PreferenceKeys {
         val sortKey = stringPreferencesKey(name = PREFERENCE_KEY)
@@ -27,13 +29,13 @@ class DataStoreRepository constructor(@ApplicationContext private val context: C
 
     private val dataStore = context.dataStore
 
-    suspend fun persistSortState(priority: Priority) {
+    override suspend fun persistSortState(priority: Priority) {
         dataStore.edit { preference ->
             preference[PreferenceKeys.sortKey] = priority.name
         }
     }
 
-    val readSortStore: Flow<String> = dataStore.data.catch { exception ->
+    override val readSortStore: Flow<String> = dataStore.data.catch { exception ->
         if (exception is IOException) {
             emit(emptyPreferences())
         } else {

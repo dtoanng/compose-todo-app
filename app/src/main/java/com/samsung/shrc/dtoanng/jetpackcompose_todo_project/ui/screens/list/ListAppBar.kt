@@ -60,7 +60,7 @@ fun ListAppBar(
         SearchAppBarState.CLOSED -> {
             DefaultListAppBar(
                 onSearchClicked = { sharedViewModel.updateSearchAppBarState(SearchAppBarState.OPENED) },
-                onSortClicked = {},
+                onSortClicked = { sharedViewModel.persistSortState(it) },
                 onDeleteClicked = { sharedViewModel.action.value = Action.DELETE_ALL }
             )
         }
@@ -119,8 +119,8 @@ fun ListAppBarActions(
     var openDialog by remember { mutableStateOf(false) }
 
     DisplayAlertDialog(
-        title = "Delete all tasks",
-        message = "Do you want to delete all of tasks?",
+        title = stringResource(R.string.delete_all_tasks),
+        message = stringResource(R.string.do_you_want_to_delete_all_of_tasks),
         openDialog = openDialog,
         closeDialog = { openDialog = false },
         onYesClicked = { onDeleteClicked() })
@@ -176,19 +176,21 @@ fun SortAction(
                     .padding(all = 0.dp)
             ) {
                 DropdownMenuItem(
+                    text = { PriorityItem(priority = Priority.NONE) },
+                    onClick = {
+                        expanded.value = false
+                        onSortClicked(Priority.NONE)
+                    }
+                )
+
+                DropdownMenuItem(
                     text = { PriorityItem(priority = Priority.LOW) },
                     onClick = {
                         expanded.value = false
                         onSortClicked(Priority.LOW)
                     }
                 )
-                DropdownMenuItem(
-                    text = { PriorityItem(priority = Priority.MEDIUM) },
-                    onClick = {
-                        expanded.value = false
-                        onSortClicked(Priority.MEDIUM)
-                    }
-                )
+
                 DropdownMenuItem(
                     text = { PriorityItem(priority = Priority.HIGH) },
                     onClick = {

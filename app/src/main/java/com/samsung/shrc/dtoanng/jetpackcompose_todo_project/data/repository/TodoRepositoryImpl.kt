@@ -33,7 +33,7 @@ class TodoRepositoryImpl @Inject constructor(private val todoDatabase: TodoDatab
         }
     }
 
-    override suspend fun sortByLowPriority(): Flow<List<TodoTask>> {
+    override fun sortByLowPriority(): Flow<List<TodoTask>> {
         return flow {
             val toDoTaskEntities = todoDatabase.todoDao().sortByLowPriority()
             if (toDoTaskEntities.isNotEmpty()) {
@@ -43,7 +43,7 @@ class TodoRepositoryImpl @Inject constructor(private val todoDatabase: TodoDatab
         }
     }
 
-    override suspend fun sortByHighPriority(): Flow<List<TodoTask>> {
+    override fun sortByHighPriority(): Flow<List<TodoTask>> {
         return flow {
             val toDoTaskEntities = todoDatabase.todoDao().sortByHighPriority()
             if (toDoTaskEntities.isNotEmpty()) {
